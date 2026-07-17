@@ -37,4 +37,58 @@ let iter f x n =
   loop n x
 
 
-(* TODO test *)
+let () =
+  let assertEquals case expected actual =
+    Printf.printf "TestCase %s: " case;
+  if expected <> actual then
+    Printf.printf "[FAIL]\nexpected:%d\nactual:%d\n" expected actual
+  else
+    Printf.printf "[OK]\n"
+  in
+
+  print_endline "===========";
+  print_endline "Test iter:";
+
+
+  let tested = ((fun x -> x * x), 2, 4) in
+  let (f, x, n) = tested in
+  let expected = 65536 in
+  let actual = iter f x n in
+  assertEquals "((fun x -> x * x), 2, 4) = 65536" expected actual;
+
+  let tested = ((fun x -> x * x), 42, 0) in
+  let (f, x, n) = tested in
+  let expected = 42 in
+  let actual = iter f x n in
+  assertEquals "((fun x -> x * x), 42, 0) = 42" expected actual;
+
+  let tested = ((fun x -> x * x), 42, 1) in
+  let (f, x, n) = tested in
+  let expected = 1764 in
+  let actual = iter f x n in
+  assertEquals "((fun x -> x * x), 42, 0) = 1764" expected actual;
+
+  let tested = ((fun x -> x * x), 100, ~-1) in
+  let (f, x, n) = tested in
+  let expected = ~-1 in
+  let actual = iter f x n in
+  assertEquals "((fun x -> x * x), 100, ~-1) = -1" expected actual;
+
+  let tested = ((fun x -> x + 1), 0, 100) in
+  let (f, x, n) = tested in
+  let expected = 100 in
+  let actual = iter f x n in
+  assertEquals "((fun x -> x + 1), 0, 100) = 100" expected actual;
+
+  let tested = ((fun x -> x + 2), 0, 100) in
+  let (f, x, n) = tested in
+  let expected = 200 in
+  let actual = iter f x n in
+  assertEquals "((fun x -> x + 2), 0, 100) = 200" expected actual;
+  
+  let tested = ((fun x -> x * 2), 2, 4) in
+  let (f, x, n) = tested in
+  let expected = 32 in
+  let actual = iter f x n in
+  assertEquals "((fun x -> x * 2), 2, 4) = 32" expected actual;
+
