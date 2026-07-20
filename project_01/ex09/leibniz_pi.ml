@@ -51,4 +51,62 @@ let leibniz_pi delta =
       let sum_term = summation_term i in
       loop (i + 1) (acc +. sum_term))
   in
-  if delta < 0.0 then ~-1 else loop 0 0.0
+  if delta < 0.0 || delta == nan then ~-1 else loop 0 0.0
+
+
+
+let () =
+  let assertEquals case expected actual =
+    Printf.printf "TestCase %s: " case;
+    let has_failed = expected <> actual
+    in
+  if has_failed then
+    Printf.printf "[FAIL]\nexpected:%d\nactual:%d\n" expected actual
+  else
+    Printf.printf "[OK]\n"
+  in
+
+  print_endline "===========";
+  print_endline "Test leibniz_pi:";
+
+  let tested = 1.0 in
+  let case = Printf.sprintf "leibniz_pi %f" tested in
+  let expected = 1 in
+  let actual = leibniz_pi tested in
+  assertEquals case expected actual;
+
+  let tested = 0.5 in
+  let case = Printf.sprintf "leibniz_pi %f" tested in
+  let expected = 2 in
+  let actual = leibniz_pi tested in
+  assertEquals case expected actual;
+
+  let tested = 0.2 in
+  let case = Printf.sprintf "leibniz_pi %f" tested in
+  let expected = 5 in
+  let actual = leibniz_pi tested in
+  assertEquals case expected actual;
+
+  let tested = 0.1 in
+  let case = Printf.sprintf "leibniz_pi %f" tested in
+  let expected = 10 in
+  let actual = leibniz_pi tested in
+  assertEquals case expected actual;
+
+  let tested = 0.05 in
+  let case = Printf.sprintf "leibniz_pi %f" tested in
+  let expected = 20 in
+  let actual = leibniz_pi tested in
+  assertEquals case expected actual;
+
+  let tested = 0.02 in
+  let case = Printf.sprintf "leibniz_pi %f" tested in
+  let expected = 50 in
+  let actual = leibniz_pi tested in
+  assertEquals case expected actual;
+
+  let tested = 0.01 in
+  let case = Printf.sprintf "leibniz_pi %f" tested in
+  let expected = 100 in
+  let actual = leibniz_pi tested in
+  assertEquals case expected actual;
