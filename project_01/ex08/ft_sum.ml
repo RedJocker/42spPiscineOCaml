@@ -12,9 +12,10 @@ will be a function taking the index as a parameter
 3. The index’s upper bound of summation
 Your function’s type will be: (int -> float) -> int -> int -> float, and it will
 be tail-recursive. No tail recursion, no points. For example, the following expression:
-10∑
-i=1
-i2
+ i=10
+ ∑  (i ** 2)
+ i=1
+
 Will be computed using your function as:
 # ft_sum (fun i -> float_of_int (i * i)) 1 10;;
 - : float = 385.
@@ -28,30 +29,59 @@ OCaml Recursion and higher-order functions - 0
 let ft_sum f lower upper =
   let rec loop i acc = match i with
   | i when i > upper -> acc
-  | i -> loop (i + 1) (acc + (f i))
+  | i -> loop (i + 1) (acc +. (f i))
   in
-  loop lower 0
+  if upper < lower then
+    nan
+  else
+    loop lower 0.0
 
 
-(*
-  TODO TEST
+let () =
+  let assertEquals case expected actual =
+    Printf.printf "TestCase %s: " case;
+    let has_failed = if expected == nan then
+                       expected != actual
+                     else expected <> actual
+    in
+  if has_failed then
+    Printf.printf "[FAIL]\nexpected:%f\nactual:%f\n" expected actual
+  else
+    Printf.printf "[OK]\n"
+  in
 
+  print_endline "===========";
+  print_endline "Test ft_sum:";
 
-# val ft_sum : (int -> int) -> int -> int -> int = <fun>
-# ft_sum (fun x -> x + 1) 1 2
-- : int = 5
-# ft_sum (fun x -> x ) 0 1
-- : int = 1
-# ft_sum (fun x -> x ) 0 2
-- : int = 3
-# ft_sum (fun x -> x ) 0 3
-- : int = 6
-# ft_sum (fun x -> x ) 0 4
-- : int = 10
-# ft_sum (fun x -> x ) 0 5
-- : int = 15
-# Seq.ints 1 |> Seq.take 10 |> Seq.map (ft_sum (fun x -> x * x) 0) |> List.of_seq;;
-- : int list = [1; 5; 14; 30; 55; 91; 140; 204; 285; 385]
-  #
+  let expecteds =
+    [1.0; 3.0; 6.0; 10.0; 15.0; 21.0; 28.0; 36.0; 45.0; 55.0]
+  in
+  Seq.ints 1
+  |> Seq.take 10
+  |> Seq.iteri (fun i n ->
+         let case =
+           Printf.sprintf "ft_sum (fun x -> float_of_int x) 0 %d" n
+         in
+         let expected = List.nth expecteds i in
+         let actual = ft_sum (fun x -> float_of_int x) 0 n in
+         assertEquals case expected actual);
 
-  *)
+  let expecteds =
+    [1.0; 5.0; 14.0; 30.0; 55.0; 91.0; 140.0; 204.0; 285.0; 385.0]
+  in
+  Seq.ints 1
+  |> Seq.take 10
+  |> Seq.iteri (fun i n ->
+         let case =
+           Printf.sprintf
+             "ft_sum (fun x -> (float_of_int x) *. (float_of_int x)) 0 %d" n
+         in
+         let expected = List.nth expecteds i in
+         let actual = ft_sum (fun x -> (float_of_int x) *. (float_of_int x)) 0 n in
+         assertEquals case expected actual);
+
+  let case = "ft_sum (fun x -> float_of_int x) 10 9"
+  in
+  let expected = nan in
+  let actual = ft_sum (fun x -> float_of_int x) 10 9 in
+  assertEquals case expected actual;
