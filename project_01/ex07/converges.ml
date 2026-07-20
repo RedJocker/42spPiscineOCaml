@@ -31,12 +31,43 @@ let converges f x n =
   in
   loop n x
 
+let () =
+  let assertEquals case expected actual =
+    Printf.printf "TestCase %s: " case;
+  if expected <> actual then
+    Printf.printf "[FAIL]\nexpected:%b\nactual:%b\n" expected actual
+  else
+    Printf.printf "[OK]\n"
+  in
 
-(* TODO TEST
+  print_endline "===========";
+  print_endline "Test converges:";
 
-   utop[63]> Seq.ints 1 |> Seq.take 10 |> Seq.map (converges (fun x -> (x / 3) * (x / 4)) 10)|> List.of_seq;;
 
-- : bool list =
-   [false; false; false; true; true; true; true; true; true; true]
+  let expecteds =
+    [false; false; false; true; true; true; true; true; true; true]
+  in
+  Seq.ints 1
+  |> Seq.take 10
+  |> Seq.iteri (fun i n ->
+         let case =
+           Printf.sprintf "converges (fun x -> (x / 3) * (x / 4)) 10 %d" n
+         in
+         let expected = List.nth expecteds i in
+         let actual = converges (fun x -> (x / 3) * (x / 4)) 10 n in
+         assertEquals case expected actual);
 
-   *)
+  let case = "converges (( * ) 2) 2 5" in
+  let expected = false in
+  let actual = converges (( * ) 2) 2 5 in
+  assertEquals case expected actual;
+
+  let case = "converges (fun x -> x / 2) 2 3" in
+  let expected = true in
+  let actual = converges (fun x -> x / 2) 2 3 in
+  assertEquals case expected actual;
+
+  let case = "converges (fun x -> x / 2) 2 2" in
+  let expected = true in
+  let actual = converges (fun x -> x / 2) 2 3 in
+  assertEquals case expected actual
