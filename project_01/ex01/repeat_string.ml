@@ -35,7 +35,8 @@ let rec repeat_string ?(str="x") = function
 
 let () =
   let assertEquals tested expected actual =
-    let case = Printf.sprintf "(%s, %d)" (Pair.fst tested) (Pair.snd tested) in
+    let (tested_str, tested_n) = tested in
+    let case = Printf.sprintf "(%s, %d)" tested_str tested_n in
     Printf.printf "TestCase %s: " case;
   if expected <> actual then
     Printf.printf "[FAIL]\nexpected:%s\nactual:%s\n" expected actual
@@ -44,22 +45,26 @@ let () =
   in
 
   let tested = ("-._.-", 4) in
+  let (tested_str, tested_n) = tested in
   let expected = "-._.--._.--._.--._.-" in
-  let actual = repeat_string ~str:(Pair.fst tested) (Pair.snd tested) in
+  let actual = repeat_string ~str:(tested_str) (tested_n) in
   assertEquals tested expected actual;
 
   let tested = ("-._.-", 0) in
+  let (tested_str, tested_n) = tested in
   let expected = "" in
-  let actual = repeat_string ~str:(Pair.fst tested) (Pair.snd tested) in
+  let actual = repeat_string ~str:(tested_str) (tested_n) in
   assertEquals tested expected actual;
 
   let tested = ("default", 4) in
+  let (tested_str, tested_n) = tested in
   let expected = "xxxx" in
-  let actual = repeat_string (Pair.snd tested) in
+  let actual = repeat_string tested_n in
   assertEquals tested expected actual;
 
   let tested = ("default", 20) in
+  let (tested_str, tested_n) = tested in
   let expected = "xxxxxxxxxxxxxxxxxxxx" in
-  let actual = repeat_string (Pair.snd tested) in
+  let actual = repeat_string tested_n in
   assertEquals tested expected actual;
 
