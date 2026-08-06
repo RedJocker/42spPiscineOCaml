@@ -35,26 +35,113 @@ let encode lst =
   | first::rest -> loop first 1 rest []
 
 
-(*
 
-  TODO TEST
+let () =
+  let list_to_string element_to_string list =
+    let rec loop lst acc =
+      match lst with
+      | [] -> acc
+      | [ele] -> acc ^ (element_to_string ele)
+      | ele::rest ->  loop rest (acc ^ (element_to_string ele) ^ ", ")
+    in
+    let inner_list = loop list "" in
+    "["^inner_list^"]"
+  in
+  let pair_to_string format1 format2 (fst, snd) =
+    let formatted1 = Printf.sprintf format1 fst in
+    let formatted2 = Printf.sprintf format2 snd in
+    "(" ^ formatted1 ^ ", " ^ formatted2 ^ ")"
+  in
+  let pair_intint_to_string  element =
+    pair_to_string "%d" "%d" element
+  in
+  let pair_intstring_to_string  element =
+    pair_to_string "%d" "%s" element
+  in
+  let pair_intchar_to_string  element =
+    pair_to_string "%d" "%c" element
+  in
+  let print_list element_to_string channel list =
+    let lst_str = list_to_string element_to_string list in
+    print_string lst_str
+  in
 
-utop[5]> encode [1;1;2;1;2;2;2];;
-- : (int * int) list = [(2, 1); (1, 2); (1, 1); (3, 2)]
 
-utop[6]> encode [];;
-- : (int * 'a) list = []
+  let assertEquals case expected actual element_to_string=
+    Printf.printf "TestCase %s: " case;
+    let has_failed = expected <> actual in
+    if has_failed then
+      Printf.printf "[FAIL]\nexpected:%a\nactual:%a\n"
+        (print_list element_to_string) expected
+        (print_list element_to_string) actual
+    else
+      Printf.printf "%a [OK] \n" (print_list element_to_string) actual
+  in
 
-utop[7]> encode [1];;
-- : (int * int) list = [(1, 1)]
+  let tested =  [1;1;2;1;2;2;2] in
+  let expected = [(2, 1); (1, 2); (1, 1); (3, 2)] in
+  let actual = encode tested in
+  let case = Printf.sprintf "%a" (fun () -> (list_to_string string_of_int)) tested in
+  assertEquals case expected actual pair_intint_to_string;
 
-utop[8]> encode ["a"];;
-- : (int * string) list = [(1, "a")]
+  let tested =  [] in
+  let expected = [] in
+  let actual = encode tested in
+  let case = Printf.sprintf "%a" (fun () -> (list_to_string string_of_int)) tested in
+  assertEquals case expected actual pair_intint_to_string;
 
-utop[12]> encode ['a'; 'a'];;
-- : (int * char) list = [(2, 'a')]
+  let tested =  [1] in
+  let expected = [(1, 1)] in
+  let actual = encode tested in
+  let case = Printf.sprintf "%a" (fun () -> (list_to_string string_of_int)) tested in
+  assertEquals case expected actual pair_intint_to_string;
 
-utop[14]> encode ['a'; 'a'; 'a'; 'b'; 'b'; 'b'];;
-- : (int * char) list = [(3, 'a'); (3, 'b')]
+  let id any = any in
 
- *)
+  let tested =  ["a"] in
+  let expected = [(1, "a")] in
+  let actual = encode tested in
+  let case = Printf.sprintf "%a" (fun () -> (list_to_string id)) tested in
+  assertEquals case expected actual pair_intstring_to_string;
+
+  let tested =  ["a"; "a"] in
+  let expected = [(2, "a")] in
+  let actual = encode tested in
+  let case = Printf.sprintf "%a" (fun () -> (list_to_string id)) tested in
+  assertEquals case expected actual pair_intstring_to_string;
+
+  let tested =  ["a"; "a"; "abc"; "ab"; "abc"; "abc"] in
+  let expected = [(2, "a"); (1, "abc"); (1, "ab"); (2, "abc")] in
+  let actual = encode tested in
+  let case = Printf.sprintf "%a" (fun () -> (list_to_string id)) tested in
+  assertEquals case expected actual pair_intstring_to_string;
+
+  let tested =  ['a';] in
+  let expected = [(1, 'a')] in
+  let actual = encode tested in
+  let case = Printf.sprintf "%a" (fun () -> (list_to_string (String.make 1))) tested in
+  assertEquals case expected actual pair_intchar_to_string;
+
+  let tested =  ['a'; 'a';] in
+  let expected = [(2, 'a')] in
+  let actual = encode tested in
+  let case = Printf.sprintf "%a" (fun () -> (list_to_string (String.make 1))) tested in
+  assertEquals case expected actual pair_intchar_to_string;
+
+  let tested =  ['a'; 'a'; 'a'] in
+  let expected = [(3, 'a')] in
+  let actual = encode tested in
+  let case = Printf.sprintf "%a" (fun () -> (list_to_string (String.make 1))) tested in
+  assertEquals case expected actual pair_intchar_to_string;
+
+  let tested =  ['a'; 'a'; 'a'; 'b'; 'b'; 'b'] in
+  let expected = [(3, 'a'); (3, 'b')] in
+  let actual = encode tested in
+  let case = Printf.sprintf "%a" (fun () -> (list_to_string (String.make 1))) tested in
+  assertEquals case expected actual pair_intchar_to_string;
+
+  let tested =  ['a'; 'a'; 'a'; 'b'; 'b'; 'c'; 'b'] in
+  let expected = [(3, 'a'); (2, 'b'); (1, 'c'); (1, 'b')] in
+  let actual = encode tested in
+  let case = Printf.sprintf "%a" (fun () -> (list_to_string (String.make 1))) tested in
+  assertEquals case expected actual pair_intchar_to_string;
