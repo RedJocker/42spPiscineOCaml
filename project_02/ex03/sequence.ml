@@ -23,10 +23,7 @@ Write a function sequence that takes an integer n as parameter and returns the n
 element of that sequence as a string. The function must be typed as: val sequence :
 int -> string. In case of an invalid parameter, the function should return an empty
 string.
-
-
  *)
-
 
 
 let sequence n =
@@ -78,3 +75,55 @@ let sequence n =
       seq (i + 1) next
   in
   if n < 0 then "" else concat_intlst (seq 0 [1])
+
+
+let () =
+  let assertEquals tested expected actual =
+    let n = tested in
+    let case = Printf.sprintf "(%d)" n in
+    Printf.printf "TestCase %s: " case;
+  if expected <> actual then
+    Printf.printf "[FAIL]\nexpected:%s\nactual:%s\n" expected actual
+  else
+    Printf.printf "%s [OK] \n" actual
+  in
+
+  let tested = 0 in
+  let expected = "1" in
+  let actual = sequence tested in
+  assertEquals tested expected actual;
+
+  let tested = 1 in
+  let expected = "11" in
+  let actual = sequence tested in
+  assertEquals tested expected actual;
+
+  let tested = 2 in
+  let expected = "21" in
+  let actual = sequence tested in
+  assertEquals tested expected actual;
+
+  let tested = 3 in
+  let expected = "1211" in
+  let actual = sequence tested in
+  assertEquals tested expected actual;
+
+  let tested = 4 in
+  let expected = "111221" in
+  let actual = sequence tested in
+  assertEquals tested expected actual;
+
+  let tested = 5 in
+  let expected = "312211" in
+  let actual = sequence tested in
+  assertEquals tested expected actual;
+
+  let tested = 6 in
+  let expected = "13112221" in
+  let actual = sequence tested in
+  assertEquals tested expected actual;
+
+  let tested = ~-1 in
+  let expected = "" in
+  let actual = sequence tested in
+  assertEquals tested expected actual;
