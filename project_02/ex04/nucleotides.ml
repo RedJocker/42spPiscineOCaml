@@ -44,4 +44,50 @@ let generate_nucleotide ch =
   {deoxyribose; phosphate; nucleobase}
 
 
-(* TODO TEST *)
+let _ =
+  let nucleotide_to_string {phosphate; deoxyribose; nucleobase} =
+    let nucleobase = match nucleobase with
+      | A -> "A"
+      | T -> "T"
+      | C -> "C"
+      | G -> "G"
+      | None -> "None"
+    in
+    Printf.sprintf "{%s; %s; %s}" phosphate deoxyribose nucleobase
+  in
+
+  let assertEquals case expected actual =
+    Printf.printf "TestCase %s: " case;
+    let expected_str = nucleotide_to_string expected in
+    let actual_str = nucleotide_to_string actual in
+  if expected <> actual then
+    Printf.printf "[FAIL]\nexpected:%s\nactual:%s\n" expected_str actual_str
+  else
+    Printf.printf "%s [OK] \n" actual_str
+  in
+
+  let default =
+    {phosphate="phosphate"; deoxyribose="deoxyribose"; nucleobase=None}
+  in
+
+  let test_case tested expected_nucleobase =
+    let expected = {default with nucleobase=expected_nucleobase} in
+    let actual = generate_nucleotide tested in
+    let case = Printf.sprintf "(%c)" tested in
+    assertEquals case expected actual;
+  in
+
+  test_case 'a' A;
+  test_case 'A' A;
+  test_case 'c' C;
+  test_case 'C' C;
+  test_case 't' T;
+  test_case 'T' T;
+  test_case 'g' G;
+  test_case 'G' G;
+
+  test_case 'x' None;
+  test_case 'X' None;
+
+  test_case ' ' None;
+  test_case '\n' None;
