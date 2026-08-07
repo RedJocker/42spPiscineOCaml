@@ -47,9 +47,9 @@ let gray n =
     | (head::tail), _ -> concat_list tail lst2 (head::acc)
   in
   let insert_0 str = String.cat "0" str in
-  let insert_1 str = String.cat "1" str in 
+  let insert_1 str = String.cat "1" str in
   let rec gray_list i = match i with
-    | i when i <= 0 -> []  
+    | i when i <= 0 -> []
     | 1 -> ["0"; "1"]
     | i ->
        let prev = gray_list (i - 1) in
@@ -65,25 +65,43 @@ let gray n =
     String.concat " " (gray_list n)
 
 
-(* 
-   TODO TEST
+let () =
+  let assertEquals tested expected actual =
+    let n = tested in
+    let case = Printf.sprintf "(%d)" n in
+    Printf.printf "TestCase %s: " case;
+  if expected <> actual then
+    Printf.printf "[FAIL]\nexpected:%s\nactual:%s\n" expected actual
+  else
+    Printf.printf "%s [OK] \n" actual
+  in
 
-   val gray : int -> string = <fun>
-utop[1]> gray 0;;
-- : string = ""
-utop[2]> gray 1;;
-- : string = "0 1"
-utop[3]> gray 2;;
-- : string = "00 01 11 10"
-utop[4]> gray 3;;
-- : string = "000 001 011 010 110 111 101 100"
-utop[5]> gray 4;;
-- : string =
-"0000 0001 0011 0010 0110 0111 0101 0100 1100 1101 1111 1110 1010 1011 1001 1000"
-utop[6]> gray ~-1;;
-- : string = ""
+  let tested = 0 in
+  let expected = "" in
+  let actual = gray tested in
+  assertEquals tested expected actual;
 
- *)                     
+  let tested = 1 in
+  let expected = "0 1" in
+  let actual = gray tested in
+  assertEquals tested expected actual;
 
+  let tested = 2 in
+  let expected = "00 01 11 10" in
+  let actual = gray tested in
+  assertEquals tested expected actual;
 
-       
+  let tested = 3 in
+  let expected = "000 001 011 010 110 111 101 100" in
+  let actual = gray tested in
+  assertEquals tested expected actual;
+
+  let tested = 4 in
+  let expected = "0000 0001 0011 0010 0110 0111 0101 0100 1100 1101 1111 1110 1010 1011 1001 1000" in
+  let actual = gray tested in
+  assertEquals tested expected actual;
+
+  let tested = ~-1 in
+  let expected = "" in
+  let actual = gray tested in
+  assertEquals tested expected actual;
