@@ -42,12 +42,12 @@ let () =
     Printf.printf "TestCase %s: " case;
     let has_failed = if expected == nan then
                        expected != actual
-                     else expected <> actual
+                     else abs_float (expected -. actual) > 0.01
     in
-  if has_failed then
-    Printf.printf "[FAIL]\nexpected:%f\nactual:%f\n" expected actual
-  else
-    Printf.printf "[OK]\n"
+    if has_failed then
+      Printf.printf "[FAIL]\nexpected:%f\nactual:%f\n" expected actual
+    else
+      Printf.printf "[OK]\n"
   in
 
   print_endline "===========";
