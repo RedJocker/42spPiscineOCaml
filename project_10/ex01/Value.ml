@@ -37,7 +37,7 @@ let all = [T2 ; T3 ; T4 ; T5 ; T6 ; T7 ; T8 ; T9 ; T10 ; Jack ; Queen ; King ; A
 (** Interger representation of a card value, from 1 for T2 to 13 for As *)
 let toInt = function
   | T2 -> 1
-  | T3 -> 2 
+  | T3 -> 2
   | T4 -> 3
   | T5 -> 4
   | T6 -> 5
@@ -49,7 +49,7 @@ let toInt = function
   | Queen -> 11
   | King -> 12
   | As -> 13
-  
+
 (** returns "2", ..., "10", "J", "Q", "K" or "A" *)
 let toString = function
   | T2 -> "2"
@@ -65,7 +65,7 @@ let toString = function
   | Queen -> "Q"
   | King -> "K"
   | As -> "A"
-  
+
 (** returns "2", ..., "10", "Jack", "Queen", "King" or "As" *)
 let toStringVerbose = function
   | T2 -> "2"
