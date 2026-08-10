@@ -238,7 +238,7 @@ let rec best = function
 
 let isOf {color=color_card} color = color_card = color
 
-let isSpade card = isOf card Color.spade
-let isHeart card = isOf card Color.heart
+let isSpade card = isOf card Color.Spade
+let isHeart card = isOf card Color.Heart
 let isDiamond card = isOf card Color.Diamond
-let isClub card = isOf card Color.club
+let isClub card = isOf card Color.Club
