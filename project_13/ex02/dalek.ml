@@ -30,12 +30,18 @@ sufficient testing for the evaluation. Feel free to add any setters you need.
 
 
 class dalek =
+  let is_alphanum ch = match ch with
+    | ch when ch >= '0' && ch <= '9' -> true
+    | ch when ch >= 'a' && ch <= 'z' -> true
+    | ch when ch >= 'A' && ch <= 'Z' -> true
+    | _ -> false
+  in
   let rec random_char () =
     let ch = Random.int_in_range
       ~min:48 ~max:122
       |> Char.chr 
     in
-    if Char.Ascii.is_alphanum ch then ch else random_char ()
+    if is_alphanum ch then ch else random_char ()
   in
 object (this)
   val phrases = [
