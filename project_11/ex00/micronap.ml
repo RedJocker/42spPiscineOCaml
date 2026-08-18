@@ -21,12 +21,12 @@ your program is running, if you need to.
 
 let my_sleep () = Unix.sleep 1
 
-
-let rec micronap = function
+let micronap = function
   | seconds when seconds <= 0 -> ()
   | seconds ->
-    ( my_sleep ();
-    micronap (seconds - 1))
+     for i = 1 to seconds do
+       my_sleep ()
+     done
 
 let _ =
   let seconds = try (
