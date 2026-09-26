@@ -36,7 +36,7 @@ let rec repeat_string ?(str="x") = function
 let () =
   let assertEquals tested expected actual =
     let (tested_str, tested_n) = tested in
-    let case = Printf.sprintf "(%s, %d)" tested_str tested_n in
+    let case = Printf.sprintf "(%s, %d): %s " tested_str tested_n actual in
     Printf.printf "TestCase %s: " case;
   if expected <> actual then
     Printf.printf "[FAIL]\nexpected:%s\nactual:%s\n" expected actual
@@ -66,5 +66,11 @@ let () =
   let (tested_str, tested_n) = tested in
   let expected = "xxxxxxxxxxxxxxxxxxxx" in
   let actual = repeat_string tested_n in
+  assertEquals tested expected actual;
+
+  let tested = ("abc|", 10) in
+  let (tested_str, tested_n) = tested in
+  let expected = "abc|abc|abc|abc|abc|abc|abc|abc|abc|abc|" in
+  let actual = repeat_string ~str:(tested_str) tested_n in
   assertEquals tested expected actual;
 
