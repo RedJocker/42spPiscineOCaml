@@ -28,4 +28,39 @@ let rec repeat_x = function
   | x when x < 0 -> "Error"
   | 0 -> ""
   | x -> "x"^(repeat_x (x - 1))
-  
+
+let () =
+  let assertEquals tested expected actual =
+    
+    let case = Printf.sprintf "(%d)" tested in
+    Printf.printf "TestCase%s: %s : " case actual;
+  if expected <> actual then
+    Printf.printf "[FAIL]\nexpected:%s\nactual:%s\n" expected actual
+  else
+    Printf.printf "[OK]\n"
+  in
+
+  let tested = 4 in
+  let expected = "xxxx" in
+  let actual = repeat_x tested in
+  assertEquals tested expected actual;
+
+  let tested = 3 in
+  let expected = "xxx" in
+  let actual = repeat_x tested in
+  assertEquals tested expected actual;
+
+  let tested = ~-1 in
+  let expected = "Error" in
+  let actual = repeat_x tested in
+  assertEquals tested expected actual;
+
+  let tested = 0 in
+  let expected = "" in
+  let actual = repeat_x tested in
+  assertEquals tested expected actual;
+
+  let tested = 10 in
+  let expected = "xxxxxxxxxx" in
+  let actual = repeat_x tested in
+  assertEquals tested expected actual;
