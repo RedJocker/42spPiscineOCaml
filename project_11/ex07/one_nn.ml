@@ -85,3 +85,7 @@ let one_nn (radars: radar list) ((p_arr, p_c): radar) : string =
   match sorted with
   | [] -> "empty"
   | (_,(_,label))::_ -> label 
+
+
+(* TODO main with tests *)
+(* TODO ex08 *)
