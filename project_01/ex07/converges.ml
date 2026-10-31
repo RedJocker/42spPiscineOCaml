@@ -47,9 +47,8 @@ let () =
   let expecteds =
     [false; false; false; true; true; true; true; true; true; true]
   in
-  Seq.ints 1
-  |> Seq.take 10
-  |> Seq.iteri (fun i n ->
+  List.init 10 (fun x -> x + 1)
+  |> List.iteri (fun i n ->
          let case =
            Printf.sprintf "converges (fun x -> (x / 3) * (x / 4)) 10 %d" n
          in

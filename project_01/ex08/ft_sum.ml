@@ -56,9 +56,8 @@ let () =
   let expecteds =
     [1.0; 3.0; 6.0; 10.0; 15.0; 21.0; 28.0; 36.0; 45.0; 55.0]
   in
-  Seq.ints 1
-  |> Seq.take 10
-  |> Seq.iteri (fun i n ->
+  List.init 10 (fun x -> x + 1)
+  |> List.iteri (fun i n ->
          let case =
            Printf.sprintf "ft_sum (fun x -> float_of_int x) 0 %d" n
          in
@@ -69,9 +68,8 @@ let () =
   let expecteds =
     [1.0; 5.0; 14.0; 30.0; 55.0; 91.0; 140.0; 204.0; 285.0; 385.0]
   in
-  Seq.ints 1
-  |> Seq.take 10
-  |> Seq.iteri (fun i n ->
+  List.init 10 (fun x -> x + 1)
+  |> List.iteri (fun i n ->
          let case =
            Printf.sprintf
              "ft_sum (fun x -> (float_of_int x) *. (float_of_int x)) 0 %d" n

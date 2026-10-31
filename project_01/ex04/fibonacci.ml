@@ -1,6 +1,5 @@
 (*
 
-
 A tribute to Fibonacci. Not the pasta, sadly.
 Turn-in directory : ex04/
 Files to turn in : fibonacci.ml
@@ -62,6 +61,6 @@ let () =
   in
 
   let expected = [~-1; 0; 1; 1; 2; 3; 5; 8; 13; 21; 34; 55] in
-  let tested = Seq.ints ~-1 |> Seq.take (List.length expected) in
-  Seq.iteri (fun i tested_i -> assertEquals tested_i (List.nth expected i) (fibonacci tested_i)) tested 
+  let tested = List.init (List.length expected) (fun x -> x - 1) in
+  List.iteri (fun i tested_i -> assertEquals tested_i (List.nth expected i) (fibonacci tested_i)) tested 
 
