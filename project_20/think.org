@@ -1,0 +1,16 @@
+
+
+a.CnH(2n + 2) + b.O2 -> c.CO2 + d.H2O
+
+
+c = n * a         | (C = C)
+d = (n + 1) * a   | (H = H)
+2b = 2c + d       | (O = O)
+2b = (2n * a) + ((n + 1) * a)
+2b = a * (2n + n + 1)
+2b = a * (3n + 1)
+b = (3na + a) / 2
+
+
+min a such that b is int
+
