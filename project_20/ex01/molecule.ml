@@ -52,7 +52,7 @@ object(this)
     |> String.concat "" 
     
   method to_string = Printf.sprintf "Molecule(%s: %s)" this#name this#formula
-  method equals (other: molecule) = this#formula == other#formula
+  method equals (other: molecule) = this#formula = other#formula
   method private atom_count_assoc  =
     let rec count_helper to_count (current_symbol, count) counted =
       match to_count with
