@@ -14,7 +14,7 @@ all: $(APP_NAME)
 $(APP_NAME): $(DOT_CMX)
 	$(OCAMLC) -o $@ $^ 
 
-./build/main.cmx : ./build/atom.cmx
+
 
 $(DOT_CMX): $(BUILD_DIR)%.cmx : %.ml | $(BUILD_DIR)
 	$(OCAMLC) -I $(BUILD_DIR) -c -o $@ $^

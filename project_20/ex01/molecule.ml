@@ -41,3 +41,95 @@
   atoms, as long as its overall electrical charge is neutral
   *)
 
+class virtual molecule (name: string) (atoms: Atom.atom list) =
+object(this)
+  val name = name
+  val atoms = List.sort (fun a b -> Atom.compare b a) atoms
+  method name = name
+  method formula =
+    this#atom_count_assoc
+    |> List.map (fun (symbol, count) -> symbol ^ (string_of_int count))
+    |> String.concat "" 
+    
+  method to_string = Printf.sprintf "Molecule(%s: %s)" this#name this#formula
+  method atom_count_assoc  =
+    let rec count_helper to_count (current_symbol, count) counted =
+      match to_count with
+      | [] -> (current_symbol, count)::counted
+      | next::rest ->
+         if next#symbol = current_symbol then
+           count_helper rest (current_symbol, count + 1) counted
+         else
+           count_helper rest (next#symbol, 1) ((current_symbol, count)::counted)
+    in
+    match atoms with
+    | [] -> []
+    | head::tail -> count_helper tail (head#symbol, 1) [] 
+end
+
+class water =
+  object(this)
+    inherit molecule
+              "Water"
+              [new Atom.oxygen; new Atom.hydrogen; new Atom.hydrogen]    
+  end
+
+class carbon_dioxyde =
+  object(this)
+    inherit molecule
+              "Carbon Dioxyde"
+              [new Atom.carbon; new Atom.oxygen; new Atom.oxygen]
+  end
+
+class tnt =
+  object(this)
+    inherit molecule
+              "TNT"
+              [new Atom.nitrogen;
+               new Atom.nitrogen;
+               new Atom.nitrogen;
+               new Atom.hydrogen;
+               new Atom.hydrogen;
+               new Atom.hydrogen;
+               new Atom.hydrogen;
+               new Atom.hydrogen;
+               new Atom.carbon;
+               new Atom.carbon;
+               new Atom.carbon;
+               new Atom.carbon;
+               new Atom.carbon;
+               new Atom.carbon;
+               new Atom.carbon;
+               new Atom.oxygen;
+               new Atom.oxygen;
+               new Atom.oxygen;
+               new Atom.oxygen;
+               new Atom.oxygen;
+               new Atom.oxygen]
+  end
+
+class ethanol =
+  object(this)
+    inherit molecule
+              "Ethanol"
+              [new Atom.hydrogen;
+               new Atom.hydrogen;
+               new Atom.hydrogen;
+               new Atom.hydrogen;
+               new Atom.hydrogen;
+               new Atom.hydrogen;
+               new Atom.carbon;
+               new Atom.carbon;
+               new Atom.oxygen]
+  end
+
+class methane =
+  object(this)
+    inherit molecule
+              "Methane"
+              [new Atom.hydrogen;
+               new Atom.hydrogen;
+               new Atom.hydrogen;
+               new Atom.hydrogen;
+               new Atom.carbon]
+  end

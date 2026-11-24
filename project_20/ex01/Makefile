@@ -1,12 +1,13 @@
 FILES := \
 	atom.ml \
+	molecule.ml \
 	main.ml
 
 BUILD_DIR := ./build/
 
 DOT_CMX  := $(addprefix $(BUILD_DIR), $(patsubst %.ml, %.cmx, $(FILES)))
 
-APP_NAME := atom
+APP_NAME := molecule
 OCAMLC := ocamlopt
 
 all: $(APP_NAME)
@@ -14,7 +15,7 @@ all: $(APP_NAME)
 $(APP_NAME): $(DOT_CMX)
 	$(OCAMLC) -o $@ $^ 
 
-./build/main.cmx : ./build/atom.cmx
+./build/main.cmx : ./build/molecule.cmx
 
 $(DOT_CMX): $(BUILD_DIR)%.cmx : %.ml | $(BUILD_DIR)
 	$(OCAMLC) -I $(BUILD_DIR) -c -o $@ $^

@@ -64,3 +64,7 @@ end
 class potassium = object(this)
   inherit atom "Potassium" "K" 19
 end
+
+class nitrogen = object(this)
+  inherit atom "Nitrogen" "N" 7
+end
