@@ -49,7 +49,7 @@ class virtual reaction
                  |> String.concat " + "  
     in
     let balanced = if this#is_balanced
-                   then " --balanced--> "
+                   then " ---balanced---> "
                    else " --unbalanced--> "
     in
     start ^ balanced ^ result

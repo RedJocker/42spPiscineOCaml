@@ -40,34 +40,43 @@
  *)
 
 class alkane_combustion
-        ?(coeficients_optional : (int list * int * int * int) option)
+        ?(coeficients : (int list * int * int * int) option)
         (alkanes : Alkane.alkane list)
   = 
-  let coeficients =
-    match coeficients_optional with 
-      | Some (cofs, o, c, w) -> (cofs, o, c, w)
+  let coeficients_norm =
+    match coeficients with
+      | Some all_cofs -> all_cofs
       | _ -> (List.init (List.length alkanes) (fun a -> 1)), 1, 1, 1
   in
-  object(this)
-    initializer
-      if List.length alkanes = 0 then
+  let _ = if List.length alkanes = 0 then
         raise (Invalid_argument "cannot make an alkane combustion without alkanes")
-      else match coeficients with
-         | (cofs, _, _, _) when List.length cofs <> List.length alkanes ->
+      else match coeficients_norm with
+         | (alk_cofs, _, _, _) when List.length alk_cofs <> List.length alkanes ->
             raise (Invalid_argument
                      "size of coeficients is not equal to size of alkanes")
          | _ -> ()
+  in
+  let alkanes_with_cofs = let (alk_cofs, _, _, _)  = coeficients_norm in
+                 List.map2 (fun a c -> a, c) alkanes alk_cofs
+                 |> List.sort_uniq
+                      (fun (a1, _) (a2, _) -> a1#compare (a2 :> Molecule.molecule))
+  in
+  let coeficients = let (_, o, c, w) = coeficients_norm in
+                    let alk_cofs = List.map (fun (_, c) -> c) alkanes_with_cofs in
+                    (alk_cofs, o, c, w)
+  in
+  let alkanes = List.map (fun (a, c ) -> a) alkanes_with_cofs in
+  object(this)
 
   inherit Reaction.reaction (
-    let (cofs, oxygen_cof, _, _)  = coeficients in
+    let (_, oxygen_cof, _, _)  = coeficients in
     let start =  
-      List.map2 (fun al_mol al_cof -> ((al_mol :> Molecule.molecule), al_cof)) alkanes cofs 
+      List.map (fun (a, c) -> (a :> Molecule.molecule), c) alkanes_with_cofs
       |> List.append [new Molecule.oxygen, oxygen_cof]
     in   
     start
   ) (
-    let (carbon_cof, water_cof)  = match coeficients with 
-      | (_, _, c, w) -> (c, w)
+    let (_, _, carbon_cof, water_cof)  = coeficients
     in
     [(new Molecule.water, water_cof); (new Molecule.carbon_dioxyde, carbon_cof)]
   ) as super
@@ -81,8 +90,8 @@ class alkane_combustion
   
   method is_balanced = match alkanes with
     | [] -> failwith "unexpected empty alkanes on balance"
-    | [alkane] ->
-       let (alkane_cof, oxygen_cof, carbon_dioxyde_cof, water_cof)  =
+    | ([alkane])->
+       let (alkane_cof, oxygen_cof, carbon_dioxyde_cof, water_cof) =
          this#calculate_coeficients alkane
        in
        ([alkane_cof], oxygen_cof, carbon_dioxyde_cof, water_cof) = coeficients
@@ -99,7 +108,7 @@ class alkane_combustion
          this#calculate_coeficients alkane
        in
        let result = new alkane_combustion
-         ~coeficients_optional:([alkane_cof], oxygen_cof, carbon_dioxyde_cof, water_cof)
+         ~coeficients:([alkane_cof], oxygen_cof, carbon_dioxyde_cof, water_cof)
          alkanes
        in
        (result :> Reaction.reaction)
@@ -108,7 +117,7 @@ class alkane_combustion
          this#calculate_coeficients_many alkanes
        in
        let result = new alkane_combustion
-         ~coeficients_optional:(cofs)
+         ~coeficients:(cofs)
          alkanes
        in
        (result :> Reaction.reaction)
