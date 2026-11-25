@@ -4,9 +4,9 @@ FILES := \
 	doctor.ml \
 	main.ml
 
-BUILD_DIR := ./build/
+BUILD_DIR := ./build
 
-DOT_CMX  := $(addprefix $(BUILD_DIR), $(patsubst %.ml, %.cmx, $(FILES)))
+DOT_CMX  := $(addprefix $(BUILD_DIR)/, $(patsubst %.ml, %.cmx, $(FILES)))
 
 APP_NAME := people
 OCAMLC := ocamlopt
@@ -17,14 +17,16 @@ $(APP_NAME): $(DOT_CMX)
 	$(OCAMLC) -o $@ $^
 
 
-$(DOT_CMX): $(BUILD_DIR)%.cmx : %.ml | $(BUILD_DIR)
+$(DOT_CMX): $(BUILD_DIR)/%.cmx : %.ml | $(BUILD_DIR)
 	$(OCAMLC) -I $(BUILD_DIR) -c -o $@ $^
 
-./build/doctor.cmx : ./build/people.cmx
+$(BUILD_DIR)/doctor.cmx : $(BUILD_DIR)/people.cmx
 
-./build/dalek.cmx : ./build/people.cmx
+$(BUILD_DIR)/dalek.cmx : $(BUILD_DIR)/people.cmx
 
-./build/main.cmx : ./build/people.cmx ./build/doctor.cmx
+$(BUILD_DIR)/main.cmx : $(BUILD_DIR)/people.cmx \
+                        $(BUILD_DIR)/doctor.cmx \
+                        $(BUILD_DIR)/dalek.cmx
 
 $(BUILD_DIR):
 	@-mkdir -p $@

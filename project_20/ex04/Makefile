@@ -6,9 +6,9 @@ FILES := \
 	alkaneCombustion.ml \
 	main.ml
 
-BUILD_DIR := ./build/
+BUILD_DIR := ./build
 
-DOT_CMX  := $(addprefix $(BUILD_DIR), $(patsubst %.ml, %.cmx, $(FILES)))
+DOT_CMX  := $(addprefix $(BUILD_DIR)/, $(patsubst %.ml, %.cmx, $(FILES)))
 
 APP_NAME := reaction
 OCAMLC := ocamlopt
@@ -16,10 +16,27 @@ OCAMLC := ocamlopt
 all: $(APP_NAME)
 
 $(APP_NAME): $(DOT_CMX)
-	$(OCAMLC) -o $@ $^ 
+	$(OCAMLC) -o $@ $^
 
-$(DOT_CMX): $(BUILD_DIR)%.cmx : %.ml | $(BUILD_DIR)
+$(DOT_CMX): $(BUILD_DIR)/%.cmx : %.ml | $(BUILD_DIR)
 	$(OCAMLC) -I $(BUILD_DIR) -c -o $@ $^
+
+$(BUILD_DIR)/alkaneCombustion.cmx : $(BUILD_DIR)/molecule.cmx \
+			            $(BUILD_DIR)/alkane.cmx \
+			            $(BUILD_DIR)/reaction.cmx 
+
+$(BUILD_DIR)/reaction.cmx : $(BUILD_DIR)/molecule.cmx 
+
+$(BUILD_DIR)/alkane.cmx : $(BUILD_DIR)/atom.cmx \
+                          $(BUILD_DIR)/molecule.cmx 
+
+$(BUILD_DIR)/molecule.cmx : $(BUILD_DIR)/atom.cmx
+
+$(BUILD_DIR)/main.cmx : $(BUILD_DIR)/atom.cmx \
+                        $(BUILD_DIR)/molecule.cmx \
+			$(BUILD_DIR)/alkane.cmx \
+			$(BUILD_DIR)/reaction.cmx \
+			$(BUILD_DIR)/alkaneCombustion.cmx
 
 $(BUILD_DIR):
 	@-mkdir -p $@
