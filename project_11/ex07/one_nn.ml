@@ -88,4 +88,4 @@ let one_nn (radars: radar list) ((p_arr, p_c): radar) : string =
 
 
 (* TODO main with tests *)
-(* TODO ex08 *)
+(* TODO ex08 optional *)

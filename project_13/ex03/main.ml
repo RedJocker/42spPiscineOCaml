@@ -38,6 +38,6 @@ let _ =
   let _ = doctors#add doctor in
   print_endline doctors#to_string
 
-(* TODO ex04 *)
-(* TODO project_20 *)
-(* TODO project_30 *)
+(* TODO ex04 optional *)
+
+

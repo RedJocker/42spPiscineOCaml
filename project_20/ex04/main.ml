@@ -31,3 +31,6 @@ let _ =
   let comb = comb#balance in
   Printf.printf "%s\n" comb#to_string;
   print_endline "";
+
+  (* TODO more tests *)
+  (* TODO ex05 optional *)

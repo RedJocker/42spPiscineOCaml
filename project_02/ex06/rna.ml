@@ -125,7 +125,7 @@ let generate_rna (helix : helix) : rna =
 
 
 (* TODO MAKE TESTS FOR THIS STAGE *)
-(* TODO ex07, ex08 *)
+(* TODO ex07 optional, ex08 optional *)
 
 let _ =
 
